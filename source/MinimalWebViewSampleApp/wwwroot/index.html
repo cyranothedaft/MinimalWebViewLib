@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello, world!</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="./tailwind.css" />
+</head>
+
+<body class="p-5 bg-gray-900 text-indigo-200">
+
+<h1 class="mb-5 font-mono text-indigo-400 text-5xl">Welcome</h1>
+<p class="mb-5">to a sample of a minimal WebView2-hosted Windows UI.</p>
+
+<br /><button id="messageBoxButton"         class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-1 px-4 rounded-md self-center">Show a message box in UI thread</button>
+<br /><button id="alertScriptButton"        class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-1 px-4 rounded-md self-center">Invoke javascript from UI thread</button>
+<br /><button id="functionWithArgButton"    class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-1 px-4 rounded-md self-center">Call a javascript function via UI-invoked script - pass argument</button>
+<br /><button id="functionWithReturnButton" class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-1 px-4 rounded-md self-center">Call a javascript function via UI-invoked script - return value</button>
+<br /><button id="replaceHtmlButton"        class="bg-indigo-600 hover:bg-indigo-800 text-white font-bold py-1 px-4 rounded-md self-center">Replace HTML via UI-invoked script function</button>
+<br />
+
+<div id="mvudiv">(HTML to be replaced)</div>
+
+<script>
+   messageBoxButton        .onclick = (event) => { sendMessage("MsgBox");               }
+   alertScriptButton       .onclick = (event) => { sendMessage("AlertScript");          }
+   functionWithArgButton   .onclick = (event) => { sendMessage("FunctionWithArg");      }
+   functionWithReturnButton.onclick = (event) => { sendMessage("FunctionWithReturn");   }
+   replaceHtmlButton       .onclick = (event) => { sendMessage("ReplaceHtml");          }
+
+   function sendMessage(msg) {
+      window.chrome.webview.postMessage(msg);
+   }
+
+   function callMe(text) {
+      alert('I am function callMe! I have now been called with argument "' + text + '".');
+   }
+
+   function iReturnSomething() {
+      //alert(text);
+      alert('I am function iReturnSomething! I will now return "Something".');
+      return 'Something';
+   }
+
+   var mvudiv = document.getElementById('mvudiv');
+   function replaceHtml(newHtml) {
+      // alert('mvudiv is currently: ' + mvudiv);
+      // alert('mvudiv.innerHTML is currently: ' + mvudiv.innerHTML);
+      // alert('now setting it to: ' + newHtml);
+      mvudiv.innerHTML = newHtml;
+      // alert('done');
+   }
+
+</script>
+</body>
+
+</html>

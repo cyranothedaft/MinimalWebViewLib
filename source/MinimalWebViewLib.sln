@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36105.17
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalWebViewLib", "MinimalWebViewLib\MinimalWebViewLib.csproj", "{DECA7977-5236-F6F1-C9FB-101D84F4FEF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalWebViewSampleApp", "MinimalWebViewSampleApp\MinimalWebViewSampleApp.csproj", "{4D0B6E9E-FC8C-B018-3F0B-8B8B9BC2065F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DECA7977-5236-F6F1-C9FB-101D84F4FEF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DECA7977-5236-F6F1-C9FB-101D84F4FEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DECA7977-5236-F6F1-C9FB-101D84F4FEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DECA7977-5236-F6F1-C9FB-101D84F4FEF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D0B6E9E-FC8C-B018-3F0B-8B8B9BC2065F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D0B6E9E-FC8C-B018-3F0B-8B8B9BC2065F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D0B6E9E-FC8C-B018-3F0B-8B8B9BC2065F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D0B6E9E-FC8C-B018-3F0B-8B8B9BC2065F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F0A95680-3652-4F41-870E-43ACB03AEE98}
+	EndGlobalSection
+EndGlobal
