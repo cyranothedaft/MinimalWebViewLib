@@ -15,30 +15,15 @@ partial class MinimalWindow {
 
 
    public static MinimalWindow Create(string windowTitle, int width, int height, uint backgroundColor, ILogger? logger) {
-      UiThreadSynchronizationContext? uiThreadSyncCtx = null;
       MinimalWindow window = new(logger);
 
-      //  👇 this is *probably* okay, right?
-      // ReSharper disable once AccessToModifiedClosure
-      HWND hwnd = registerAndCreate(windowTitle, width, height, backgroundColor,
-                                    (hwnd, msg, wParam, lParam) => WndProc(() => uiThreadSyncCtx,
-                                                                           onResize: (hwnd1, wParam1, lparam_lo, lparam_hi) => {
-                                                                                        logger?.LogTrace("[callback] MinimalWindow.onResize: {hwnd:x8} {wparam} {lparam_lo} {lparam_hi}", hwnd1.Value, wParam1.Value, lparam_lo, lparam_hi);
-                                                                                        window.raiseSizeEvent(width: lparam_lo,
-                                                                                                              height: lparam_hi);
-                                                                                     },
-                                                                           onClosing: () => {
-                                                                                         logger?.LogTrace("[callback] MinimalWindow.onClosing");
-                                                                                         window.raiseClosingEvent();
-                                                                                         window.Close();
-                                                                                      },
-                                                                           hwnd, msg, wParam, lParam));
+      HWND hwnd = registerAndCreate(windowTitle, width, height, backgroundColor, window._wndProc);
 
       if (hwnd.Value == 0)
          throw new Exception("hwnd not created");
 
       window._hwnd = hwnd;
-      SynchronizationContext.SetSynchronizationContext(uiThreadSyncCtx = new UiThreadSynchronizationContext(hwnd)); // we want to minimize the time that uiThreadSyncCtx is non-null and not yet set as the synchronization context
+      SynchronizationContext.SetSynchronizationContext(window._uiThreadSyncCtx = new UiThreadSynchronizationContext(hwnd)); // we want to minimize the time that uiThreadSyncCtx is non-null and not yet set as the synchronization context
 
       return window;
    }
@@ -95,9 +80,7 @@ partial class MinimalWindow {
 
 
          // unsafe
-         static ushort registerWindowClass(HINSTANCE hInstance, HBRUSH backgroundBrush, string windowTitle,
-                                           WNDPROC wndProc
-         ) {
+         static ushort registerWindowClass(HINSTANCE hInstance, HBRUSH backgroundBrush, string windowTitle, WNDPROC wndProc) {
             fixed ( char* classNamePtr = windowTitle ) {
                WNDCLASSW wc = new()
                                  {
@@ -129,7 +112,7 @@ partial class MinimalWindow {
    }
 
 
-   private static LRESULT WndProc(Func<UiThreadSynchronizationContext?> uiThreadSyncCtxFunc,
+   private static LRESULT WndProc(UiThreadSynchronizationContext? uiThreadSyncCtx,
                                   WindowSizeCallbackDelegate onResize, Action onClosing,
                                   HWND hwnd, uint msg, WPARAM wParam, LPARAM lParam) {
       switch (msg) {
@@ -138,7 +121,7 @@ partial class MinimalWindow {
             break;
 
          case Constants.WM_SYNCHRONIZATIONCONTEXT_WORK_AVAILABLE:
-            uiThreadSyncCtxFunc()?.RunAvailableWorkOnCurrentThread();
+            uiThreadSyncCtx?.RunAvailableWorkOnCurrentThread();
             break;
 
          case PInvoke.WM_CLOSE:

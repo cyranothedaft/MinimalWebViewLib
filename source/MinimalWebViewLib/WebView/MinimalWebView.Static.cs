@@ -75,20 +75,25 @@ partial class MinimalWebView {
          logger?.LogDebug("WebView2 initialization succeeded."); // TODO: improve
          return controller;
       }
-      catch (WebView2RuntimeNotFoundException) {
-         var result = PInvoke.MessageBox(hwnd, "WebView2 runtime not installed.\r\n" +
-                                               "Download and install:\r\n"           +
-                                               "https://developer.microsoft.com/en-us/microsoft-edge/webview2?form=MA13LH",
-                                         "Error", MESSAGEBOX_STYLE.MB_OK | MESSAGEBOX_STYLE.MB_ICONERROR);
-
-         if (result == MESSAGEBOX_RESULT.IDYES) {
-            //TODO: show message: download WV2 bootstrapper from https://go.microsoft.com/fwlink/p/?LinkId=2124703 and run it
-         }
-
+      catch (WebView2RuntimeNotFoundException ex) {
+         // var result = PInvoke.MessageBox(hwnd, "WebView2 runtime not installed.\r\n" +
+         //                                       "Download and install:\r\n"           +
+         //                                       "https://developer.microsoft.com/en-us/microsoft-edge/webview2?form=MA13LH",
+         //                                 "Error", MESSAGEBOX_STYLE.MB_OK | MESSAGEBOX_STYLE.MB_ICONERROR);
+         //
+         // if (result == MESSAGEBOX_RESULT.IDYES) {
+         //    //TODO: show message: download WV2 bootstrapper from https://go.microsoft.com/fwlink/p/?LinkId=2124703 and run it
+         // }
+         logger?.LogError(ex, "WebView2 runtime not installed");
+         logger?.LogDebug("Stopping application with exit code 1");
+         // await Task.Delay(300);
          Environment.Exit(1); // TODO: !?
       }
       catch (Exception ex) {
-         PInvoke.MessageBox(hwnd, $"Failed to initialize WebView2:{Environment.NewLine}{ex}", "Error", MESSAGEBOX_STYLE.MB_OK | MESSAGEBOX_STYLE.MB_ICONERROR);
+         // PInvoke.MessageBox(hwnd, $"Failed to initialize WebView2:{Environment.NewLine}{ex}", "Error", MESSAGEBOX_STYLE.MB_OK | MESSAGEBOX_STYLE.MB_ICONERROR);
+         logger?.LogError(ex, "Failed to initialize WebView2");
+         logger?.LogDebug("Stopping application with exit code 1");
+         // await Task.Delay(300);
          Environment.Exit(1); // TODO: !?
       }
       throw new Exception("never here");
