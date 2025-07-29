@@ -10,10 +10,9 @@ namespace MinimalWebViewLib.Window;
 public static class MessagePump {
    public static int Run(ILogger? logger = null) {
       logger?.LogDebug("Starting message pump");
+      HWND hwnd = new();
       MSG msg;
-      while (PInvoke.GetMessage(out msg,
-                                new HWND(), // TODO why?
-                                0, 0)) {
+      while (PInvoke.GetMessage(out msg, hwnd, 0, 0)) {
          logger?.LogTraceWM(msg);
          PInvoke.TranslateMessage(msg);
          PInvoke.DispatchMessage(msg);
