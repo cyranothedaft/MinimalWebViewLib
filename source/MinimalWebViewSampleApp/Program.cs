@@ -76,6 +76,9 @@ public static class Program {
                   string html = $"<h1>NEW CONTENT!</h1><h5>Your new random number is: <b>{_rng.Next(1, 999)}</b></h5>";
                   await webView.ExecuteScriptAsync($"window.replaceHtml('{html}')");
                   break;
+
+               case "Throw":
+                  throw new Exception("--simulated failure--");
             }
 
          }
